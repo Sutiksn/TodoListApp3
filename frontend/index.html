@@ -1,0 +1,1840 @@
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="light">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- Anti-cache meta headers to ensure latest edits load immediately -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <title>TaskFlow Enterprise | Scalable Multi-Mode Task Management Platform</title>
+    
+    <!-- Google Fonts & Bootstrap Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom Application CSS -->
+    <link href="/css/app.css?v=7.0" rel="stylesheet">
+    
+    <!-- Instant Theme Loader (Prevents flash of wrong theme on reload) -->
+    <script>
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('taskflow_theme') || 'light';
+                document.documentElement.setAttribute('data-bs-theme', savedTheme);
+            } catch(e) {}
+        })();
+    </script>
+</head>
+<body>
+
+    <!-- =============================================================================
+         USER AUTHENTICATION SCREEN (Split-Screen /login)
+         ============================================================================= -->
+    <div id="authSection" class="min-vh-100 d-none">
+        <div class="container-fluid p-0 min-vh-100 position-relative" style="overflow: hidden;">
+            <div class="row g-0 min-vh-100 auth-split-row auth-mode-login" id="authRow">
+                <!-- Left/Right Hero Section (Swaps with form on Create Account) -->
+                <div id="authHeroBanner" class="col-lg-7 d-none d-lg-flex flex-column justify-content-between p-4 p-xl-5 text-white auth-hero-banner">
+                    
+                    <!-- Top Brand Header (Visible in Sign In, Hidden when Create Account is clicked - White on Blue Background) -->
+                    <div class="d-flex align-items-center gap-2 position-relative z-2 hero-top-header" id="heroTopHeader">
+                        <svg class="taskflow-brand-icon text-white" width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2.2"/>
+                            <rect x="5.5" y="5.5" width="3" height="8" rx="1" fill="currentColor"/>
+                            <rect x="10.5" y="5.5" width="3" height="5" rx="1" fill="currentColor"/>
+                            <rect x="15.5" y="5.5" width="3" height="12" rx="1" fill="currentColor"/>
+                        </svg>
+                        <span class="fs-4 fw-bold tracking-wide text-white">TaskFlow</span>
+                    </div>
+
+                    <!-- Center/Upper Hero Dynamic Content for Sign In -->
+                    <div id="heroContentLogin" class="position-relative z-2 hero-content-block my-auto py-3">
+                        <span class="badge bg-white bg-opacity-25 text-white rounded-pill px-3 py-1 mb-3 hero-badge" id="heroBadgeLogin">ENTERPRISE PLATFORM</span>
+                        <h1 class="display-6 fw-bold mb-3 lh-tight text-white">
+                            Empower Your Workflows. <br>
+                            <span style="color: #fde047;">Execute With Velocity.</span>
+                        </h1>
+                        <p class="lead text-white-50 mb-0 fs-6 hero-lead-text" style="max-width: 440px;">
+                            The unified multi-mode task management platform engineered for personal focus, team collaboration, milestone velocity, and organization governance.
+                        </p>
+                    </div>
+
+                    <!-- Center/Upper Hero Dynamic Content for Create Account -->
+                    <div id="heroContentRegister" class="position-relative z-2 hero-content-block my-auto py-3 d-none">
+                        <span class="badge bg-white bg-opacity-25 text-white rounded-pill px-3 py-1 mb-3 hero-badge" id="heroBadgeRegister">NEW WORKSPACE</span>
+                        <h1 class="display-6 fw-bold mb-3 lh-tight text-white">
+                            Build, Collaborate & Scale. <br>
+                            <span style="color: #fde047;">Join TaskFlow Today.</span>
+                        </h1>
+                        <p class="lead text-white-50 mb-0 fs-6 hero-lead-text" style="max-width: 440px;">
+                            Create your account to unlock dedicated team boards, release tracks, workflow stage automation, and enterprise governance.
+                        </p>
+                    </div>
+
+                    <!-- Footer Copyright Note (Pinned at bottom) -->
+                    <div class="position-relative z-2 d-flex justify-content-between align-items-center text-white-50 small hero-footer-row mt-auto pt-4" id="heroFooterRow">
+                        <span>&copy; TaskFlow Enterprise Platform. All rights reserved.</span>
+                    </div>
+                </div>
+
+                <!-- Right/Left Side: User Login / Register Card Panel (Swaps to left on Create Account) -->
+                <div id="authCardPanel" class="col-12 col-lg-5 d-flex flex-column justify-content-center align-items-center p-3 p-md-4 p-xl-5 auth-card-panel">
+                    
+                    <div class="w-100 my-auto py-2 auth-card-wrapper">
+                        
+                        <!-- Mobile Header (Visible on mobile/tablet - Blue on White/Light Background) -->
+                        <div class="d-lg-none text-center mb-3">
+                            <div class="d-inline-flex align-items-center justify-content-center mb-2">
+                                <svg class="taskflow-brand-icon brand-text-blue" width="40" height="40" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2.2"/>
+                                    <rect x="5.5" y="5.5" width="3" height="8" rx="1" fill="currentColor"/>
+                                    <rect x="10.5" y="5.5" width="3" height="5" rx="1" fill="currentColor"/>
+                                    <rect x="15.5" y="5.5" width="3" height="12" rx="1" fill="currentColor"/>
+                                </svg>
+                            </div>
+                            <h4 class="fw-bold brand-text-blue mb-0">TaskFlow Enterprise</h4>
+                            <p class="text-muted small mb-0">Multi-Mode Task Management Platform</p>
+                        </div>
+
+                        <div class="card border auth-card shadow-sm">
+                            <div class="card-body auth-card-body">
+                                
+                                <!-- LOGIN FORM -->
+                                <form id="formLogin" class="auth-form-animated" onsubmit="handleLogin(event)">
+                                    <!-- Pinned Header -->
+                                    <div class="auth-card-header mb-3">
+                                        <h4 class="fw-bold mb-1">Sign In</h4>
+                                        <p class="text-muted small mb-0">Welcome back! Please enter your credentials.</p>
+                                    </div>
+
+                                    <!-- Scrollable Middle Fields Area -->
+                                    <div class="auth-fields-scrollable flex-grow-1 pe-1 mb-2">
+                                        <div class="mb-3">
+                                            <label class="form-label small fw-semibold">Username or Email</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                                <input type="text" id="loginUsername" class="form-control" placeholder="Enter username or email" required autocomplete="username">
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                                <label class="form-label small fw-semibold mb-0">Password</label>
+                                                <a href="javascript:void(0)" onclick="openForgotPasswordModal()" class="small text-decoration-none" style="font-size: 0.8rem;">Forgot password?</a>
+                                            </div>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                                <input type="password" id="loginPassword" class="form-control" placeholder="Enter password" required autocomplete="current-password">
+                                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('loginPassword', this)" title="Show / Hide Password">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Pinned Bottom Actions (Button & Text are fixed, not scrollable) -->
+                                    <div class="auth-card-footer mt-auto pt-2 border-top">
+                                        <button type="submit" id="btnLoginSubmit" class="btn btn-primary w-100 py-2 fw-semibold" style="border-radius: var(--radius-sm);">
+                                            <i class="bi bi-box-arrow-in-right me-1"></i> Sign In to Platform
+                                        </button>
+
+                                        <div class="text-center mt-3">
+                                            <p class="text-muted small mb-0">
+                                                New user? Register here 
+                                                <a href="javascript:void(0)" onclick="switchAuthTab('register')" class="fw-bold text-primary text-decoration-none ms-1">
+                                                    Create Account <i class="bi bi-arrow-right-short"></i>
+                                                </a>
+                                            </p>
+                                        </div>
+                                    </div>
+                                </form>
+
+                                <!-- REGISTER FORM (TWO-STEP REGISTRATION & OTP VERIFICATION) -->
+                                <form id="formRegister" class="d-none auth-form-animated" onsubmit="handleRegisterFormSubmit(event)">
+                                    
+                                    <!-- STEP 1: Details Entry -->
+                                    <div id="regStepFields">
+                                        <!-- Pinned Header -->
+                                        <div class="auth-card-header mb-3">
+                                            <h4 class="fw-bold mb-1">Create Account</h4>
+                                            <p class="text-muted small mb-0">Set up your profile and join your workspace.</p>
+                                        </div>
+
+                                        <!-- Scrollable Middle Fields Area (ONLY the fields scroll!) -->
+                                        <div class="auth-fields-scrollable flex-grow-1 pe-1 mb-2">
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-semibold">Full Name</label>
+                                                <input type="text" id="regFullName" class="form-control" placeholder="e.g. John Doe" required>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-semibold">Username</label>
+                                                <input type="text" id="regUsername" class="form-control" placeholder="Choose username" required autocomplete="username">
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-semibold">Email Address</label>
+                                                <input type="email" id="regEmail" class="form-control" placeholder="name@company.com" required autocomplete="email">
+                                            </div>
+
+                                            <!-- Password Field -->
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-semibold">Password</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                                    <input type="password" id="regPassword" class="form-control" placeholder="Minimum 6 characters" minlength="6" required autocomplete="new-password">
+                                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('regPassword', this)" title="Show / Hide Password">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                            <!-- Role Selection -->
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-semibold">Select Desired Role</label>
+                                                <select id="regRole" class="form-select" onchange="handleRegRoleChange()">
+                                                    <option value="User" selected>User</option>
+                                                    <option value="Employee">Employee (Team Contributor)</option>
+                                                    <option value="Manager">Manager (Team Lead / Project Manager)</option>
+                                                    <option value="OrgAdmin">Organization Admin</option>
+                                                </select>
+                                            </div>
+
+                                            <!-- Organization Name Input for OrgAdmin -->
+                                            <div id="regOrgNameContainer" class="mb-3 d-none">
+                                                <label class="form-label small fw-semibold">Organization / Company Name <span class="text-danger">*</span></label>
+                                                <input type="text" id="regOrgName" class="form-control" placeholder="e.g. Acme Corporation">
+                                                <div class="form-text small" style="font-size: 0.72rem;">Enter your company name so employees and managers can easily join your organization.</div>
+                                            </div>
+
+                                            <!-- Dynamic Org / Manager Selector based on selected role -->
+                                            <div id="regOrgSelectorContainer" class="mb-3 d-none">
+                                                <label class="form-label small fw-semibold" id="regOrgLabel">Target Organization</label>
+                                                <select id="regOrganization" class="form-select" onchange="handleRegOrgChange()">
+                                                    <option value="">-- Choose Organization --</option>
+                                                </select>
+                                            </div>
+
+                                            <div id="regManagerSelectorContainer" class="mb-3 d-none">
+                                                <label class="form-label small fw-semibold">Target Manager</label>
+                                                <select id="regTargetManager" class="form-select">
+                                                    <option value="">-- Choose Manager --</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- Pinned Bottom Actions (Button & Text are fixed, not scrollable) -->
+                                        <div class="auth-card-footer mt-auto pt-2 border-top">
+                                            <button type="submit" id="btnRegisterSubmit" class="btn btn-primary w-100 py-2 fw-semibold" style="border-radius: var(--radius-sm);">
+                                                <i class="bi bi-shield-check me-1"></i> Verify & Create Account
+                                            </button>
+
+                                            <div class="text-center mt-3">
+                                                <p class="text-muted small mb-0">
+                                                    Already have an account? 
+                                                    <a href="javascript:void(0)" onclick="switchAuthTab('login')" class="fw-bold text-primary text-decoration-none ms-1">
+                                                        Sign In <i class="bi bi-arrow-right-short"></i>
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- STEP 2: OTP Verification & Final Confirmation -->
+                                    <div id="regStepOtp" class="d-none">
+                                        <!-- Pinned Header -->
+                                        <div class="auth-card-header mb-3">
+                                            <h4 class="fw-bold mb-1">Verify Your Email</h4>
+                                            <p class="text-muted small mb-0">Enter the 6-digit verification code sent to your email.</p>
+                                        </div>
+
+                                        <!-- Scrollable Middle Content Area -->
+                                        <div class="auth-fields-scrollable flex-grow-1 pe-1 mb-2">
+                                            <!-- Locked Email Display Card with Change Button -->
+                                            <div class="d-flex align-items-center justify-content-between p-3 mb-3 rounded-3 border bg-body-tertiary">
+                                                <div class="d-flex align-items-center gap-2 text-truncate me-2">
+                                                    <div class="p-2 rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width: 38px; height: 38px; flex-shrink: 0;">
+                                                        <i class="bi bi-envelope-check fs-5"></i>
+                                                    </div>
+                                                    <div class="text-truncate">
+                                                        <div class="text-muted" style="font-size: 0.72rem; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px;">Verification Email</div>
+                                                        <div class="fw-bold text-truncate text-primary" id="regDisplayEmail" style="font-size: 0.92rem;">name@company.com</div>
+                                                    </div>
+                                                </div>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm px-2 py-1 flex-shrink-0" onclick="handleBackToRegFields()" title="Change Email Address">
+                                                    <i class="bi bi-pencil-square me-1"></i> Change
+                                                </button>
+                                            </div>
+
+                                            <!-- 6-Digit OTP Field -->
+                                            <div class="mb-3">
+                                                <label class="form-label small fw-semibold text-center d-block">6-Digit Verification Code</label>
+                                                <input type="text" id="regOtp" class="form-control form-control-lg fw-bold text-center" placeholder="••••••" maxlength="6" style="letter-spacing: 6px; font-size: 1.4rem;" autocomplete="one-time-code">
+                                                <div class="d-flex justify-content-between align-items-center mt-2 px-1">
+                                                    <span class="text-muted small" style="font-size: 0.75rem;">Valid for 10 minutes</span>
+                                                    <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none fw-semibold" onclick="handleResendRegOtp()" id="btnResendRegOtp" style="font-size: 0.78rem;">
+                                                        Resend Code
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Pinned Bottom Actions (Button & Text are fixed, not scrollable) -->
+                                        <div class="auth-card-footer mt-auto pt-2 border-top">
+                                            <button type="submit" id="btnConfirmRegister" class="btn btn-success w-100 py-2 fw-semibold" style="border-radius: var(--radius-sm);">
+                                                <i class="bi bi-check-circle me-1"></i> Complete Registration
+                                            </button>
+
+                                            <div class="text-center mt-3">
+                                                <p class="text-muted small mb-0">
+                                                    Need to change details? 
+                                                    <a href="javascript:void(0)" onclick="handleBackToRegFields()" class="fw-bold text-primary text-decoration-none ms-1">
+                                                        Back to Details
+                                                    </a>
+                                                </p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =============================================================================
+         MAIN APPLICATION SHELL (Shown when authenticated)
+         ============================================================================= -->
+    <div id="appShell" class="d-none min-vh-100 d-flex flex-column">
+        
+        <!-- TOP NAVBAR -->
+        <nav class="navbar navbar-expand-lg navbar-glass py-2">
+            <div class="container-fluid px-3 px-lg-4">
+                
+                <!-- Left: Brand & Mode Switcher -->
+                <div class="d-flex align-items-center gap-3">
+                    <a class="navbar-brand d-flex align-items-center gap-2 mb-0" href="javascript:void(0)" onclick="navigateTo('/personal')">
+                        <svg class="taskflow-brand-icon brand-text-blue" width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2.2"/>
+                            <rect x="5.5" y="5.5" width="3" height="8" rx="1" fill="currentColor"/>
+                            <rect x="10.5" y="5.5" width="3" height="5" rx="1" fill="currentColor"/>
+                            <rect x="15.5" y="5.5" width="3" height="12" rx="1" fill="currentColor"/>
+                        </svg>
+                        <span class="brand-text-blue fw-bold fs-5">TaskFlow</span>
+                    </a>
+
+                    <!-- 5 MODES SWITCHER (Desktop) -->
+                    <div class="mode-switcher d-none d-lg-inline-flex">
+                        <button class="mode-btn active" data-mode="Personal" onclick="switchMode('Personal')">
+                            <i class="bi bi-person"></i> Personal
+                        </button>
+                        <button class="mode-btn" data-mode="Team" onclick="switchMode('Team')">
+                            <i class="bi bi-people"></i> Team
+                        </button>
+                        <button class="mode-btn" data-mode="Project" onclick="switchMode('Project')">
+                            <i class="bi bi-rocket-takeoff"></i> Project
+                        </button>
+                        <button class="mode-btn" data-mode="Business" id="navBusinessBtn" onclick="switchMode('Business')">
+                            <i class="bi bi-building"></i> Organization Governance
+                        </button>
+                        <button class="mode-btn" data-mode="Admin" id="navAdminBtn" onclick="switchMode('Admin')">
+                            <i class="bi bi-shield-lock"></i> Admin
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Mobile Drawer Toggle, Workspace Selector, Quick Create, Profile -->
+                <div class="d-flex align-items-center gap-2 gap-md-3">
+                    
+                    <!-- Mobile Mode Switcher Trigger -->
+                    <button class="btn btn-outline-secondary btn-sm d-lg-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#mobileNavDrawer" title="Switch Mode">
+                        <i class="bi bi-grid-fill"></i>
+                    </button>
+
+                    <!-- Workspace Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn btn-outline-secondary btn-sm dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" id="activeWorkspaceBtn">
+                            <i class="bi bi-grid-1x2"></i>
+                            <span id="activeWorkspaceName" class="d-none d-sm-inline">Loading...</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm" id="workspaceDropdownList">
+                            <!-- Populated dynamically -->
+                        </ul>
+                    </div>
+
+                    <!-- Quick Add Button -->
+                    <div class="dropdown">
+                        <button class="btn btn-primary btn-sm d-flex align-items-center gap-1 shadow-sm" style="background: var(--primary-gradient); border: none;" data-bs-toggle="dropdown">
+                            <i class="bi bi-plus-lg"></i>
+                            <span class="d-none d-sm-inline">New</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><a class="dropdown-item small py-2" href="javascript:void(0)" onclick="openCreateTaskModal()"><i class="bi bi-check2-square text-primary me-2"></i> New Task</a></li>
+                            <li><a class="dropdown-item small py-2" href="javascript:void(0)" onclick="openCreateProjectModal()"><i class="bi bi-folder-plus text-purple me-2"></i> New Project</a></li>
+                            <li><a class="dropdown-item small py-2" href="javascript:void(0)" onclick="openCreateGoalModal()"><i class="bi bi-bullseye text-success me-2"></i> New Goal</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item small py-2" href="javascript:void(0)" onclick="openCreateWorkspaceModal()"><i class="bi bi-grid-plus me-2"></i> New Workspace</a></li>
+                        </ul>
+                    </div>
+
+                    <!-- Access & Governance Requests Drawer Button -->
+                    <button class="btn btn-outline-secondary btn-sm position-relative d-flex align-items-center gap-1" id="btnNavRequests" type="button" onclick="openRequestsDrawer()" title="Access & Governance Requests">
+                        <i class="bi bi-person-badge"></i>
+                        <span class="d-none d-md-inline fw-semibold small">Requests</span>
+                        <span id="navRequestsBadge" class="badge rounded-pill bg-danger d-none" style="font-size: 0.65rem;">0</span>
+                    </button>
+
+                    <!-- Quick Theme Toggle in Top Navbar -->
+                    <button class="btn btn-outline-secondary btn-sm rounded-circle d-flex align-items-center justify-content-center theme-toggle-btn shadow-sm" type="button" onclick="toggleTheme()" id="navThemeToggle" title="Toggle Light / Dark Mode" style="width: 32px; height: 32px;">
+                        <i class="bi bi-moon-stars" id="navThemeIcon"></i>
+                    </button>
+
+                    <!-- User Profile Dropdown -->
+                    <div class="dropdown">
+                        <button class="btn p-0 border-0 dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown">
+                            <div class="avatar-circle" id="userAvatar">U</div>
+                            <span class="d-none d-md-inline fw-semibold small" id="userDisplayName">User</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-lg" style="border-radius: var(--radius-md);">
+                            <li class="px-3 py-2 border-bottom">
+                                <div class="fw-bold small" id="menuUserFullName">User Full Name</div>
+                                <div class="text-muted" style="font-size: 0.75rem;" id="menuUserRole">Member</div>
+                            </li>
+                            <li><a class="dropdown-item small py-2" href="javascript:void(0)" onclick="navigateTo('/profile')"><i class="bi bi-person-gear me-2"></i> Profile & Security Settings</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item small py-2 text-danger" href="javascript:void(0)" onclick="handleLogout()"><i class="bi bi-box-arrow-right me-2"></i> Sign Out</a></li>
+                        </ul>
+                    </div>
+
+                </div>
+            </div>
+        </nav>
+
+        <!-- MOBILE NAVIGATION OFFCANVAS DRAWER -->
+        <div class="offcanvas offcanvas-start" tabindex="-1" id="mobileNavDrawer" aria-labelledby="mobileNavDrawerLabel">
+            <div class="offcanvas-header border-bottom py-3">
+                <div class="d-flex align-items-center gap-2">
+                    <svg class="taskflow-brand-icon brand-text-blue" width="26" height="26" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="2" y="2" width="20" height="20" rx="5" stroke="currentColor" stroke-width="2.2"/>
+                        <rect x="5.5" y="5.5" width="3" height="8" rx="1" fill="currentColor"/>
+                        <rect x="10.5" y="5.5" width="3" height="5" rx="1" fill="currentColor"/>
+                        <rect x="15.5" y="5.5" width="3" height="12" rx="1" fill="currentColor"/>
+                    </svg>
+                    <h5 class="offcanvas-title fw-bold brand-text-blue mb-0" id="mobileNavDrawerLabel">TaskFlow</h5>
+                </div>
+                <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+            </div>
+            <div class="offcanvas-body p-3 d-flex flex-column justify-content-between">
+                <div>
+                    <!-- Mobile User Identity Card -->
+                    <div class="p-3 mb-3 rounded-3 border bg-body-tertiary d-flex align-items-center gap-3">
+                        <div class="avatar-circle" id="mobileUserAvatar" style="width: 40px; height: 40px; font-size: 0.95rem;">U</div>
+                        <div class="overflow-hidden">
+                            <div class="fw-bold small text-truncate" id="mobileUserFullName">User Full Name</div>
+                            <div class="text-muted" style="font-size: 0.72rem;" id="mobileUserRole">Member</div>
+                        </div>
+                    </div>
+
+                    <!-- Mobile Workspace Indicator -->
+                    <div class="p-2 mb-3 rounded border small d-flex justify-content-between align-items-center" style="background: rgba(79, 70, 229, 0.04);">
+                        <span class="text-muted" style="font-size: 0.75rem;"><i class="bi bi-grid-1x2 me-1"></i> Workspace:</span>
+                        <strong class="text-primary text-truncate ms-2" id="mobileActiveWorkspaceName">Personal</strong>
+                    </div>
+
+                    <h6 class="text-muted text-uppercase small fw-bold mb-2" style="font-size: 0.7rem; letter-spacing: 0.05em;">Application Modes</h6>
+                    <div class="d-flex flex-column gap-2 mb-4">
+                        <button class="btn btn-outline-primary text-start d-flex align-items-center gap-2 py-2 mode-btn" data-mode="Personal" onclick="switchMode('Personal'); bootstrap.Offcanvas.getInstance(document.getElementById('mobileNavDrawer')).hide();">
+                            <i class="bi bi-person fs-5"></i> Personal Mode
+                        </button>
+                        <button class="btn btn-outline-info text-start d-flex align-items-center gap-2 py-2 mode-btn" data-mode="Team" onclick="switchMode('Team'); bootstrap.Offcanvas.getInstance(document.getElementById('mobileNavDrawer')).hide();">
+                            <i class="bi bi-people fs-5"></i> Team Mode
+                        </button>
+                        <button class="btn btn-outline-purple text-start d-flex align-items-center gap-2 py-2 mode-btn" data-mode="Project" onclick="switchMode('Project'); bootstrap.Offcanvas.getInstance(document.getElementById('mobileNavDrawer')).hide();">
+                            <i class="bi bi-rocket-takeoff fs-5"></i> Project Mode
+                        </button>
+                        <button class="btn btn-outline-success text-start d-flex align-items-center gap-2 py-2 mode-btn" data-mode="Business" id="mobileNavBusinessBtn" onclick="switchMode('Business'); bootstrap.Offcanvas.getInstance(document.getElementById('mobileNavDrawer')).hide();">
+                            <i class="bi bi-building fs-5"></i> Organization Governance
+                        </button>
+                        <button class="btn btn-outline-danger text-start d-flex align-items-center gap-2 py-2 mode-btn" data-mode="Admin" id="mobileNavAdminBtn" onclick="switchMode('Admin'); bootstrap.Offcanvas.getInstance(document.getElementById('mobileNavDrawer')).hide();">
+                            <i class="bi bi-shield-lock fs-5"></i> Platform Administration
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Drawer Footer Actions -->
+                <div class="border-top pt-3 d-flex flex-column gap-2">
+                    <button class="btn btn-light btn-sm text-start d-flex align-items-center justify-content-between py-2 px-3" onclick="navigateTo('/profile'); bootstrap.Offcanvas.getInstance(document.getElementById('mobileNavDrawer')).hide();">
+                        <span><i class="bi bi-person-gear me-2"></i> Profile & Settings</span>
+                        <i class="bi bi-chevron-right small text-muted"></i>
+                    </button>
+                    <button class="btn btn-outline-danger btn-sm text-start d-flex align-items-center gap-2 py-2 px-3" onclick="handleLogout()">
+                        <i class="bi bi-box-arrow-right"></i> Sign Out
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAIN CONTAINER -->
+        <main class="flex-grow-1 p-3 p-lg-4">
+            <div class="container-fluid max-w-7xl">
+
+                <!-- Dynamic Mode Banner -->
+                <div id="modeBanner" class="mode-banner mode-personal">
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3">
+                        <div>
+                            <div class="d-flex align-items-center gap-2 mb-1">
+                                <span class="badge bg-white text-dark rounded-pill px-2 py-1 fw-bold small" id="modeBadge">PERSONAL MODE</span>
+                                <span class="text-white-50 small" id="modeSubtext">Individual Productivity & Focus</span>
+                            </div>
+                            <h4 class="fw-bold mb-0 text-white" id="modeTitle">My Daily Planner & Workspace</h4>
+                        </div>
+                        <!-- Mode Quick Toolbar -->
+                        <div class="d-flex align-items-center gap-2" id="modeToolbar">
+                            <!-- Populated dynamically per mode -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- MODE CONTENT CONTAINERS -->
+                <div id="viewPersonal" class="mode-view">
+                    <!-- Stats Overview -->
+                    <div class="row g-3 mb-4" id="personalStatsRow">
+                        <!-- Populated dynamically -->
+                    </div>
+                    <!-- View Selector: Kanban vs Calendar vs Analytics -->
+                    <div class="card border-0 shadow-sm mb-4" style="border-radius: var(--radius-md);">
+                        <div class="card-header bg-transparent border-0 d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-2 pt-3 px-3">
+                            <div class="d-flex align-items-center overflow-x-auto pb-1 pb-md-0" style="scrollbar-width: none;">
+                                <ul class="nav nav-pills p-1 rounded-pill flex-nowrap" style="background: rgba(0,0,0,0.04);">
+                                    <li class="nav-item">
+                                        <button class="nav-link active rounded-pill btn-sm small py-1 px-3 text-nowrap" id="btnPersonalKanban" onclick="switchPersonalSubView('kanban')"><i class="bi bi-kanban me-1"></i> Kanban Stages</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link rounded-pill btn-sm small py-1 px-3 text-nowrap" id="btnPersonalCalendar" onclick="switchPersonalSubView('calendar')"><i class="bi bi-calendar-event me-1"></i> Calendar</button>
+                                    </li>
+                                    <li class="nav-item">
+                                        <button class="nav-link rounded-pill btn-sm small py-1 px-3 text-nowrap" id="btnPersonalAnalytics" onclick="switchPersonalSubView('analytics')"><i class="bi bi-graph-up me-1"></i> Productivity</button>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="d-flex align-items-center gap-2 flex-wrap flex-sm-nowrap">
+                                <div class="input-group input-group-sm flex-grow-1" style="min-width: 150px; max-width: 240px;">
+                                    <span class="input-group-text bg-transparent border-end-0 text-muted"><i class="bi bi-search"></i></span>
+                                    <input type="text" class="form-control border-start-0 ps-0" placeholder="Search tasks..." id="taskSearchInput" oninput="debounceSearchTasks(this.value)">
+                                </div>
+                                <button class="btn btn-outline-secondary btn-sm" onclick="loadTasks()" title="Refresh Tasks"><i class="bi bi-arrow-clockwise"></i></button>
+                            </div>
+                        </div>
+                        <div class="card-body p-3">
+                            <!-- KANBAN BOARD -->
+                            <div id="subviewKanban" class="kanban-board">
+                                <!-- Stage: Plan -->
+                                <div class="kanban-column" data-stage="Plan">
+                                    <div class="kanban-header">
+                                        <span><i class="bi bi-compass text-secondary me-1"></i> Plan</span>
+                                        <span class="badge bg-secondary rounded-pill" id="countPlan">0</span>
+                                    </div>
+                                    <div class="kanban-task-list" id="colPlan" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'Plan')"></div>
+                                </div>
+                                <!-- Stage: To Do -->
+                                <div class="kanban-column" data-stage="ToDo">
+                                    <div class="kanban-header">
+                                        <span><i class="bi bi-circle text-info me-1"></i> To Do</span>
+                                        <span class="badge bg-info text-dark rounded-pill" id="countToDo">0</span>
+                                    </div>
+                                    <div class="kanban-task-list" id="colToDo" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'ToDo')"></div>
+                                </div>
+                                <!-- Stage: In Progress -->
+                                <div class="kanban-column" data-stage="InProgress">
+                                    <div class="kanban-header">
+                                        <span><i class="bi bi-arrow-repeat text-warning me-1"></i> In Progress</span>
+                                        <span class="badge bg-warning text-dark rounded-pill" id="countInProgress">0</span>
+                                    </div>
+                                    <div class="kanban-task-list" id="colInProgress" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'InProgress')"></div>
+                                </div>
+                                <!-- Stage: Review -->
+                                <div class="kanban-column" data-stage="Review">
+                                    <div class="kanban-header">
+                                        <span><i class="bi bi-eye text-purple me-1" style="color:#7c3aed;"></i> Review</span>
+                                        <span class="badge bg-purple text-white rounded-pill" style="background:#7c3aed;" id="countReview">0</span>
+                                    </div>
+                                    <div class="kanban-task-list" id="colReview" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'Review')"></div>
+                                </div>
+                                <!-- Stage: Completed -->
+                                <div class="kanban-column" data-stage="Completed">
+                                    <div class="kanban-header">
+                                        <span><i class="bi bi-check2-circle text-success me-1"></i> Completed</span>
+                                        <span class="badge bg-success rounded-pill" id="countCompleted">0</span>
+                                    </div>
+                                    <div class="kanban-task-list" id="colCompleted" ondragover="allowDrop(event)" ondrop="handleDrop(event, 'Completed')"></div>
+                                </div>
+                            </div>
+
+                            <!-- CALENDAR SUBVIEW -->
+                            <div id="subviewCalendar" class="d-none">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h6 class="fw-bold mb-0" id="calendarMonthTitle">Month Year</h6>
+                                    <div class="btn-group btn-group-sm">
+                                        <button class="btn btn-outline-secondary" onclick="prevCalendarMonth()"><i class="bi bi-chevron-left"></i></button>
+                                        <button class="btn btn-outline-secondary" onclick="todayCalendarMonth()">Today</button>
+                                        <button class="btn btn-outline-secondary" onclick="nextCalendarMonth()"><i class="bi bi-chevron-right"></i></button>
+                                    </div>
+                                </div>
+                                <div class="calendar-grid" id="calendarGrid"></div>
+                            </div>
+
+                            <!-- ANALYTICS SUBVIEW -->
+                            <div id="subviewAnalytics" class="d-none">
+                                <div class="row g-3" id="personalAnalyticsContainer"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- TEAM MODE VIEW -->
+                <div id="viewTeam" class="mode-view d-none">
+                    <div class="row g-3 mb-4" id="teamStatsRow"></div>
+                    
+                    <!-- Added Details / Summary Above Flow Column -->
+                    <div class="row g-3 mb-4">
+                        <!-- Team Member Workloads -->
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-pie-chart me-2 text-info"></i> Member Workload Balance</h6>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="openAddWorkspaceMemberModal()"><i class="bi bi-person-plus me-1"></i> Add Member</button>
+                                </div>
+                                <div class="card-body p-3" id="teamWorkloadList"></div>
+                            </div>
+                        </div>
+                        <!-- Team Activity Stream -->
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-clock-history me-2 text-warning"></i> Team Activity Stream</h6>
+                                    <button class="btn btn-outline-danger btn-sm py-0 px-2" style="font-size: 0.72rem;" onclick="handleClearTeamActivityStream()">
+                                        <i class="bi bi-trash me-1"></i> Clear Stream
+                                    </button>
+                                </div>
+                                <div class="card-body p-3" id="teamActivityList" style="max-height: 220px; overflow-y: auto;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full-Width Execution Board Expanded for Desktop -->
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-people me-2 text-primary"></i> Team Task Execution Board</h6>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <button class="btn btn-primary btn-sm shadow-sm" onclick="openCreateTaskModal()"><i class="bi bi-plus-lg me-1"></i> Delegate Task</button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="kanban-board" id="teamKanbanBoard">
+                                        <!-- Populated dynamically across 5 full columns -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROJECT MODE VIEW -->
+                <div id="viewProject" class="mode-view d-none">
+                    <div class="row g-3 mb-4" id="projectStatsRow"></div>
+                    
+                    <!-- Added Details / Summary Above Flow Column -->
+                    <div class="row g-3 mb-4">
+                        <!-- Projects Track -->
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-rocket-takeoff me-2 text-purple"></i> Projects Track</h6>
+                                    <button class="btn btn-sm btn-outline-primary" onclick="openCreateProjectModal()"><i class="bi bi-plus me-1"></i> New Project</button>
+                                </div>
+                                <div class="card-body p-3" id="projectsList" style="max-height: 220px; overflow-y: auto;"></div>
+                            </div>
+                        </div>
+                        <!-- Milestones & Releases -->
+                        <div class="col-lg-6">
+                            <div class="card border-0 shadow-sm h-100" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="fw-bold mb-0"><i class="bi bi-flag me-2 text-success"></i> Milestones</h6>
+                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill" id="milestonesProjectBadge" style="font-size: 0.72rem;">Select a Project</span>
+                                    </div>
+                                    <button class="btn btn-sm btn-outline-success" onclick="openCreateMilestoneModal()"><i class="bi bi-plus me-1"></i> Add Milestone</button>
+                                </div>
+                                <div class="card-body p-3" id="milestonesList" style="max-height: 220px; overflow-y: auto;"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Full-Width Workflow Stages Board Expanded for Desktop -->
+                    <div class="row g-3">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-diagram-3 me-2 text-primary"></i> Project Workflow Stages</h6>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <button class="btn btn-primary btn-sm shadow-sm" onclick="openCreateTaskModal()"><i class="bi bi-plus-lg me-1"></i> Add Project Task</button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="kanban-board" id="projectKanbanBoard"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ORGANIZATION GOVERNANCE (BUSINESS) MODE VIEW -->
+                <div id="viewBusiness" class="mode-view d-none">
+                    <!-- Organization Overview Metrics -->
+                    <div class="row g-3 mb-4" id="businessStatsRow"></div>
+
+                    <div class="row g-3">
+                        <!-- Left: Departments & Approvals Queue -->
+                        <div class="col-lg-7">
+                            <!-- Pending Approvals Queue -->
+                            <div class="card border-0 shadow-sm mb-4" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-patch-check me-2 text-warning"></i> Review & Workflow Approvals Queue</h6>
+                                    <span class="badge bg-warning text-dark rounded-pill" id="pendingApprovalsBadge">0 Pending</span>
+                                </div>
+                                <div class="card-body p-3" id="approvalsQueueList"></div>
+                            </div>
+                            <!-- Department Breakdown -->
+                            <div class="card border-0 shadow-sm" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 pt-3 px-3">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-buildings me-2 text-success"></i> Department Performance</h6>
+                                </div>
+                                <div class="card-body p-3" id="departmentStatsList"></div>
+                            </div>
+                        </div>
+                        <!-- Right: Org Directory -->
+                        <div class="col-lg-5">
+                            <div class="card border-0 shadow-sm" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-person-lines-fill me-2 text-info"></i> Employee Directory</h6>
+                                    <button class="btn btn-outline-primary btn-sm" onclick="openAddOrgMemberModal()"><i class="bi bi-person-plus me-1"></i> Add Employee</button>
+                                </div>
+                                <div class="card-body p-3" id="orgEmployeeList"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ADMIN MODE VIEW (Space-Optimized & Dedicated to Platform Admin) -->
+                <div id="viewAdmin" class="mode-view d-none">
+                    <!-- Top Stats Row -->
+                    <div class="row g-3 mb-4" id="adminStatsRow"></div>
+
+                    <!-- Pending OrgAdmin Approvals Queue -->
+                    <div class="row g-3 mb-4">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm" style="border-radius: var(--radius-md); border-left: 4px solid #4f46e5 !important;">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="fw-bold mb-0"><i class="bi bi-person-check-fill me-2 text-primary"></i> Pending Organization Admin & Enterprise Approvals Queue</h6>
+                                        <span class="badge bg-danger rounded-pill d-none" id="adminIncomingReqBadge">0 Pending</span>
+                                    </div>
+                                    <button class="btn btn-outline-secondary btn-sm py-1 px-2" onclick="loadAdminIncomingRequests()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                                </div>
+                                <div class="card-body p-3" id="adminIncomingRequestsList">
+                                    <div class="text-center text-muted small py-3">Loading pending role requests...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 2-Column Split: Users Governance (Col-8) & Health/Logs (Col-4) -->
+                    <div class="row g-3 mb-4">
+                        <!-- Left: Platform Users & Roles Governance -->
+                        <div class="col-lg-8">
+                            <div class="card border-0 shadow-sm" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-shield-shaded me-2 text-danger"></i> Platform Users & Roles Governance</h6>
+                                    <button class="btn btn-outline-secondary btn-sm py-1 px-2" onclick="loadAdminMode()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="table-responsive table-scrollable-users-5">
+                                        <table class="table table-hover align-middle small mb-0">
+                                            <thead class="sticky-top">
+                                                <tr>
+                                                    <th>User</th>
+                                                    <th>Email</th>
+                                                    <th>Department</th>
+                                                    <th>Role</th>
+                                                    <th>Status</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="adminUserTableBody"></tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right: System Health & Security Audits -->
+                        <div class="col-lg-4 d-flex flex-column gap-3">
+                            <div class="card border-0 shadow-sm" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 pt-3 px-3">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-cpu me-2 text-success"></i> System Health & Metrics</h6>
+                                </div>
+                                <div class="card-body p-3" id="adminHealthBox"></div>
+                            </div>
+
+                            <div class="card border-0 shadow-sm" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-journal-text me-2 text-muted"></i> Global Security Audit Log</h6>
+                                    <button class="btn btn-outline-danger btn-sm py-0 px-2" style="font-size: 0.72rem;" onclick="handleAdminClearAuditLogs()"><i class="bi bi-trash me-1"></i> Clear Logs</button>
+                                </div>
+                                <div class="card-body p-3 audit-log-scrollable-3" id="adminAuditLogsList"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Platform Workspaces Governance (Admin Only) -->
+                    <div class="row g-3 mb-4" id="adminWorkspacesGovernanceRow">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="fw-bold mb-0"><i class="bi bi-grid-fill me-2 text-primary"></i> Platform Workspaces Governance</h6>
+                                        <span class="badge bg-secondary-subtle text-secondary rounded-pill" id="adminWorkspacesCountBadge">0 Workspaces</span>
+                                    </div>
+                                    <button class="btn btn-outline-secondary btn-sm py-1 px-2" onclick="loadAdminWorkspaces()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="table-responsive table-scrollable-5">
+                                        <table class="table table-hover align-middle small mb-0">
+                                            <thead class="sticky-top">
+                                                <tr>
+                                                    <th>Workspace Name</th>
+                                                    <th>Mode</th>
+                                                    <th>Organization</th>
+                                                    <th>Created By</th>
+                                                    <th>Tasks / Projects</th>
+                                                    <th>Created Date</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="adminWorkspaceTableBody">
+                                                <tr><td colspan="7" class="text-center text-muted py-3">Loading workspaces...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Platform Organizations Governance (Admin Only) -->
+                    <div class="row g-3" id="adminOrganizationsGovernanceRow">
+                        <div class="col-12">
+                            <div class="card border-0 shadow-sm" style="border-radius: var(--radius-md);">
+                                <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center pt-3 px-3">
+                                    <div class="d-flex align-items-center gap-2">
+                                        <h6 class="fw-bold mb-0"><i class="bi bi-building me-2 text-primary"></i> Platform Organizations Governance</h6>
+                                        <span class="badge bg-secondary-subtle text-secondary rounded-pill" id="adminOrgsCountBadge">0 Organizations</span>
+                                    </div>
+                                    <div class="d-flex align-items-center gap-2">
+                                        <button class="btn btn-outline-danger btn-sm py-1 px-2" onclick="handleAdminClearAllOrganizations()"><i class="bi bi-trash3-fill me-1"></i> Clear All Organizations</button>
+                                        <button class="btn btn-outline-secondary btn-sm py-1 px-2" onclick="loadAdminOrganizations()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                                    </div>
+                                </div>
+                                <div class="card-body p-3">
+                                    <div class="table-responsive table-scrollable-5">
+                                        <table class="table table-hover align-middle small mb-0">
+                                            <thead class="sticky-top">
+                                                <tr>
+                                                    <th>Organization Name</th>
+                                                    <th>Slug</th>
+                                                    <th>Plan</th>
+                                                    <th>Members</th>
+                                                    <th>Workspaces</th>
+                                                    <th>Created Date</th>
+                                                    <th>Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="adminOrgTableBody">
+                                                <tr><td colspan="7" class="text-center text-muted py-3">Loading organizations...</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PROFILE & SECURITY SETTINGS FULL-PAGE VIEW -->
+                <div id="viewProfile" class="mode-view d-none">
+                    <div class="row g-4 mb-4">
+                        <!-- Left Column: User Summary Card & Governance Scope -->
+                        <div class="col-lg-5 col-xl-4">
+                            
+                            <!-- Profile Identity Card -->
+                            <div class="card border-0 shadow-sm mb-4" style="border-radius: var(--radius-lg); background: var(--bg-card);">
+                                <div class="card-body p-4 text-center">
+                                    <div class="avatar-circle mx-auto mb-3 shadow-sm" id="profileCardAvatar" style="width: 80px; height: 80px; font-size: 2rem; background: var(--primary-gradient); color: #fff;">
+                                        U
+                                    </div>
+                                    <h5 class="fw-bold mb-1" id="profileCardFullName">User Full Name</h5>
+                                    <p class="text-muted small mb-2" id="profileCardUsername">@username</p>
+                                    <div class="d-flex justify-content-center gap-2 mb-3">
+                                        <span class="badge bg-primary-subtle text-primary border border-primary-subtle rounded-pill px-3 py-1" id="profileCardRole">Member</span>
+                                        <span class="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-3 py-1" id="profileCardDept">General</span>
+                                    </div>
+                                    
+                                    <hr class="my-3 opacity-25">
+
+                                    <div class="text-start small">
+                                        <div class="d-flex justify-content-between py-1 border-bottom">
+                                            <span class="text-muted"><i class="bi bi-envelope me-1"></i> Email:</span>
+                                            <span class="fw-semibold text-truncate ms-2" id="profileCardEmail" style="max-width: 180px;">user@example.com</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between py-1 border-bottom">
+                                            <span class="text-muted"><i class="bi bi-calendar-check me-1"></i> Joined:</span>
+                                            <span class="fw-semibold" id="profileCardJoined">Jan 2026</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between py-1">
+                                            <span class="text-muted"><i class="bi bi-clock-history me-1"></i> Last Active:</span>
+                                            <span class="fw-semibold" id="profileCardLastActive">Just now</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Role & Permissions Overview Card -->
+                            <div class="card border-0 shadow-sm mb-4" style="border-radius: var(--radius-lg); background: var(--bg-card);">
+                                <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-shield-check text-primary me-2"></i> Role & Governance Scope</h6>
+                                </div>
+                                <div class="card-body p-4">
+                                    <p class="small text-muted mb-3" id="profileRoleDescription">
+                                        Your current platform role determines access to collaborative workspaces, team boards, and organization governance.
+                                    </p>
+                                    <div class="p-3 rounded" style="background: var(--bg-surface); border: 1px solid var(--border-color);">
+                                        <div class="d-flex justify-content-between align-items-center mb-2">
+                                            <span class="small fw-bold">Active Workspace:</span>
+                                            <span class="badge bg-primary rounded-pill small" id="profileActiveWorkspace">Personal</span>
+                                        </div>
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <span class="small fw-bold">Available Workspaces:</span>
+                                            <span class="badge bg-secondary rounded-pill small" id="profileWorkspaceCount">1</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Right Column: Profile Form, Password Change, & Account Actions -->
+                        <div class="col-lg-7 col-xl-8">
+
+                            <!-- Edit Profile Details Card -->
+                            <div class="card border-0 shadow-sm mb-4" style="border-radius: var(--radius-lg); background: var(--bg-card);">
+                                <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0 d-flex justify-content-between align-items-center">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-person-lines-fill text-primary me-2"></i> Personal Information</h6>
+                                    <span class="text-muted small">Update your account details</span>
+                                </div>
+                                <div class="card-body p-4">
+                                    <form id="formUpdateProfile" onsubmit="handleUpdateProfile(event)">
+                                        <div class="row g-3 mb-3">
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-semibold">Full Name <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                                    <input type="text" id="profileFullName" class="form-control" required placeholder="Your full name">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-semibold">Username <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="bi bi-at"></i></span>
+                                                    <input type="text" id="profileUsername" class="form-control" required minlength="3" placeholder="Username">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-semibold">Email Address <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                                    <input type="email" id="profileEmail" class="form-control" required placeholder="name@company.com">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-semibold">Department</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="bi bi-building"></i></span>
+                                                    <input type="text" id="profileDept" class="form-control" placeholder="e.g. Engineering, Product, Marketing">
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="submit" id="btnSaveProfile" class="btn btn-primary px-4 fw-semibold shadow-sm">
+                                                <i class="bi bi-check2-circle me-1"></i> Save Profile Changes
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Change Password Card -->
+                            <div class="card border-0 shadow-sm mb-4" style="border-radius: var(--radius-lg); background: var(--bg-card);">
+                                <div class="card-header bg-transparent border-0 pt-4 px-4 pb-0">
+                                    <h6 class="fw-bold mb-0"><i class="bi bi-key-fill text-warning me-2"></i> Security & Password Management</h6>
+                                </div>
+                                <div class="card-body p-4">
+                                    <form id="formChangePass" onsubmit="handleChangePassword(event)">
+                                        <div class="mb-3">
+                                            <label class="form-label small fw-semibold">Current Password</label>
+                                            <div class="input-group">
+                                                <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+                                                <input type="password" id="passCurrent" class="form-control" placeholder="Enter current password" required autocomplete="current-password">
+                                                <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('passCurrent', this)" title="Show / Hide Password">
+                                                    <i class="bi bi-eye"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div class="row g-3 mb-4">
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-semibold">New Password</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                                    <input type="password" id="passNew" class="form-control" placeholder="Minimum 6 characters" minlength="6" required autocomplete="new-password">
+                                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('passNew', this)" title="Show / Hide Password">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <label class="form-label small fw-semibold">Confirm New Password</label>
+                                                <div class="input-group">
+                                                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                                    <input type="password" id="passConfirm" class="form-control" placeholder="Re-enter new password" minlength="6" required autocomplete="new-password">
+                                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('passConfirm', this)" title="Show / Hide Password">
+                                                        <i class="bi bi-eye"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="d-flex justify-content-end">
+                                            <button type="submit" id="btnUpdatePass" class="btn btn-outline-secondary px-4 fw-semibold">
+                                                <i class="bi bi-shield-check me-1"></i> Update Password
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <!-- Delete Account Card -->
+                            <div class="card border shadow-sm" style="border-radius: var(--radius-lg); background: var(--bg-card);">
+                                <div class="card-body p-4">
+                                    <div class="d-flex flex-column flex-sm-row justify-content-between align-items-sm-center gap-3">
+                                        <div>
+                                            <h6 class="fw-bold mb-1">Delete Account</h6>
+                                            <p class="text-muted small mb-0">Permanently remove your account and personal workspace data.</p>
+                                        </div>
+                                        <button type="button" class="btn btn-outline-danger btn-sm px-3 text-nowrap fw-semibold" onclick="handleDeleteMyAccount()">
+                                             <i class="bi bi-trash3 me-1"></i> Delete Account
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+        </main>
+    </div>
+
+    <!-- =============================================================================
+         TASK DETAILS OFFCANVAS DRAWER
+         ============================================================================= -->
+    <div class="offcanvas offcanvas-end offcanvas-task-drawer" tabindex="-1" id="taskDetailsDrawer">
+        <div class="offcanvas-header border-bottom py-3">
+            <div class="d-flex align-items-center gap-2">
+                <span id="drawerStatusBadge" class="badge bg-primary rounded-pill">Status</span>
+                <span id="drawerPriorityBadge" class="badge rounded-pill">Priority</span>
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body p-4">
+            <h5 class="fw-bold mb-2" id="drawerTaskTitle">Task Title</h5>
+            <p class="text-muted small mb-4" id="drawerTaskDescription">Task description</p>
+
+            <!-- Quick Status Transition Toolbar -->
+            <div class="mb-4 p-2 rounded" style="background: rgba(0,0,0,0.03);">
+                <label class="form-label small fw-semibold text-muted d-block mb-1">Advance Workflow Stage:</label>
+                <div class="btn-group btn-group-sm w-100" id="drawerStageButtonGroup">
+                    <button class="btn btn-outline-secondary" onclick="updateCurrentTaskStatus('Plan')">Plan</button>
+                    <button class="btn btn-outline-primary" onclick="updateCurrentTaskStatus('ToDo')">To Do</button>
+                    <button class="btn btn-outline-warning" onclick="updateCurrentTaskStatus('InProgress')">In Progress</button>
+                    <button class="btn btn-outline-info" onclick="updateCurrentTaskStatus('Review')">Review</button>
+                    <button class="btn btn-outline-success" onclick="updateCurrentTaskStatus('Completed')">Completed</button>
+                </div>
+            </div>
+
+            <!-- Drawer Tabs -->
+            <ul class="nav nav-tabs mb-3" id="taskDrawerTabs">
+                <li class="nav-item"><button class="nav-link active small py-2 px-3" data-bs-toggle="tab" data-bs-target="#tabSubtasks"><i class="bi bi-list-check me-1"></i> Subtasks</button></li>
+                <li class="nav-item"><button class="nav-link small py-2 px-3" data-bs-toggle="tab" data-bs-target="#tabComments"><i class="bi bi-chat-left-text me-1"></i> Comments</button></li>
+                <li class="nav-item"><button class="nav-link small py-2 px-3" data-bs-toggle="tab" data-bs-target="#tabMeta"><i class="bi bi-info-circle me-1"></i> Details</button></li>
+            </ul>
+
+            <div class="tab-content">
+                <!-- Subtasks Tab -->
+                <div class="tab-pane fade show active" id="tabSubtasks">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="small fw-semibold text-muted" id="drawerSubtasksProgressText">0 / 0 Completed</span>
+                    </div>
+                    <div class="task-progress-mini mb-3">
+                        <div class="task-progress-mini-bar" id="drawerSubtasksProgressBar" style="width: 0%;"></div>
+                    </div>
+                    <div id="drawerSubtasksList" class="d-flex flex-column gap-2 mb-3"></div>
+                    <form id="formAddSubtask" onsubmit="handleAddSubtask(event)" class="d-flex gap-2">
+                        <input type="text" id="newSubtaskInput" class="form-control form-control-sm" placeholder="Add a subtask..." required>
+                        <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-plus"></i></button>
+                    </form>
+                </div>
+
+                <!-- Comments Tab -->
+                <div class="tab-pane fade" id="tabComments">
+                    <div id="drawerCommentsList" class="mb-3" style="max-height: 250px; overflow-y: auto;"></div>
+                    <form id="formAddComment" onsubmit="handleAddComment(event)">
+                        <textarea id="newCommentInput" class="form-control form-control-sm mb-2" rows="2" placeholder="Write a comment or update..." required></textarea>
+                        <button type="submit" class="btn btn-primary btn-sm"><i class="bi bi-send me-1"></i> Post Comment</button>
+                    </form>
+                </div>
+
+                <!-- Details / Meta Tab -->
+                <div class="tab-pane fade" id="tabMeta">
+                    <div class="row g-2 small">
+                        <div class="col-6"><span class="text-muted">Workspace:</span> <strong id="drawerMetaWorkspace">-</strong></div>
+                        <div class="col-6"><span class="text-muted">Project:</span> <strong id="drawerMetaProject">-</strong></div>
+                        <div class="col-6"><span class="text-muted">Assignee:</span> <strong id="drawerMetaAssignee">-</strong></div>
+                        <div class="col-6"><span class="text-muted">Due Date:</span> <strong id="drawerMetaDueDate">-</strong></div>
+                        <div class="col-6"><span class="text-muted">Estimated:</span> <strong id="drawerMetaEstHours">0 hrs</strong></div>
+                        <div class="col-6"><span class="text-muted">Created By:</span> <strong id="drawerMetaCreatedBy">-</strong></div>
+                    </div>
+                    <hr id="drawerMetaDivider">
+                    <button id="btnDeleteTask" class="btn btn-outline-danger btn-sm w-100" onclick="handleDeleteCurrentTask()"><i class="bi bi-trash me-1"></i> Delete Task</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- =============================================================================
+         MODALS (Create Task, Create Project, Create Goal, Create Workspace, etc.)
+         ============================================================================= -->
+
+    <!-- CREATE TASK MODAL -->
+    <div class="modal fade" id="modalCreateTask" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md);">
+                <div class="modal-header border-bottom py-3">
+                    <h6 class="modal-title fw-bold"><i class="bi bi-plus-circle me-2 text-primary"></i> Create New Task</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formCreateTask" onsubmit="handleCreateTask(event)">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Task Title</label>
+                            <input type="text" id="taskInputTitle" class="form-control" placeholder="e.g. Implement OAuth Flow" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Description</label>
+                            <textarea id="taskInputDesc" class="form-control" rows="2" placeholder="Task requirements, scope, or notes..."></textarea>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Workflow Stage</label>
+                                <select id="taskInputStatus" class="form-select form-select-sm">
+                                    <option value="Plan">Plan</option>
+                                    <option value="ToDo" selected>To Do</option>
+                                    <option value="InProgress">In Progress</option>
+                                    <option value="Review">Review</option>
+                                    <option value="Completed">Completed</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Priority</label>
+                                <select id="taskInputPriority" class="form-select form-select-sm">
+                                    <option value="Low">Low</option>
+                                    <option value="Medium" selected>Medium</option>
+                                    <option value="High">High</option>
+                                    <option value="Urgent">Urgent</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Due Date</label>
+                                <input type="date" id="taskInputDueDate" class="form-control form-control-sm">
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Assignee</label>
+                                <select id="taskInputAssignee" class="form-select form-select-sm">
+                                    <option value="">(Unassigned)</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Project (Optional)</label>
+                            <select id="taskInputProject" class="form-select form-select-sm">
+                                <option value="">(None - Workspace Level)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top py-2">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm px-4">Create Task</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CREATE PROJECT MODAL -->
+    <div class="modal fade" id="modalCreateProject" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md);">
+                <div class="modal-header border-bottom py-3">
+                    <h6 class="modal-title fw-bold"><i class="bi bi-folder-plus me-2 text-purple"></i> Create Project</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formCreateProject" onsubmit="handleCreateProject(event)">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Project Name</label>
+                            <input type="text" id="projectInputName" class="form-control" placeholder="e.g. Q4 Platform Release" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Description</label>
+                            <textarea id="projectInputDesc" class="form-control" rows="2" placeholder="Objectives and scope..."></textarea>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Priority</label>
+                                <select id="projectInputPriority" class="form-select form-select-sm">
+                                    <option value="Low">Low</option>
+                                    <option value="Medium" selected>Medium</option>
+                                    <option value="High">High</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Align with Goal</label>
+                                <select id="projectInputGoal" class="form-select form-select-sm">
+                                    <option value="">(No Goal)</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top py-2">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm px-4">Create Project</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CREATE GOAL MODAL -->
+    <div class="modal fade" id="modalCreateGoal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md);">
+                <div class="modal-header border-bottom py-3">
+                    <h6 class="modal-title fw-bold"><i class="bi bi-bullseye me-2 text-success"></i> Create Strategic Goal</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formCreateGoal" onsubmit="handleCreateGoal(event)">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Goal Title</label>
+                            <input type="text" id="goalInputTitle" class="form-control" placeholder="e.g. Scale Platform to 100k Users" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Target Date</label>
+                            <input type="date" id="goalInputTargetDate" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top py-2">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success btn-sm px-4">Save Goal</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORGOT PASSWORD MODAL (2-Step OTP) -->
+    <div class="modal fade" id="modalForgotPassword" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md);">
+                <div class="modal-header border-bottom py-3">
+                    <h6 class="modal-title fw-bold"><i class="bi bi-shield-lock me-2 text-primary"></i> Recover Account Password</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- Step 1: Request OTP -->
+                    <div id="otpStep1">
+                        <p class="text-muted small mb-3">Enter your registered username or email address. We will send a secure 6-digit OTP code to your inbox.</p>
+                        <form onsubmit="handleSendOtp(event)">
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Username or Email</label>
+                                <input type="text" id="otpInputUserOrEmail" class="form-control" placeholder="e.g. yourname@domain.com or username" required>
+                            </div>
+                            <button type="submit" id="btnSendOtpSubmit" class="btn btn-primary w-100 py-2">Send 6-Digit OTP</button>
+                        </form>
+                    </div>
+                    <!-- Step 2: Verify & Reset -->
+                    <div id="otpStep2" class="d-none">
+                        <div class="alert alert-info py-2 small mb-3">OTP sent to <strong id="otpDisplayTarget">email</strong>. Valid for 10 mins.</div>
+                        <form onsubmit="handleVerifyOtpAndReset(event)">
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">6-Digit OTP Code</label>
+                                <input type="text" id="otpInputCode" class="form-control text-center fw-bold fs-4" placeholder="••••••" maxlength="6" required style="letter-spacing: 6px;">
+                            </div>
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">New Password</label>
+                                <div class="input-group">
+                                    <input type="password" id="otpInputNewPass" class="form-control border-end-0" placeholder="At least 6 characters" minlength="6" required>
+                                    <button class="btn btn-outline-secondary border-start-0 bg-transparent text-muted" type="button" onclick="togglePasswordVisibility('otpInputNewPass', this)" title="Show / Hide Password">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <button type="submit" id="btnVerifyOtpSubmit" class="btn btn-success w-100 py-2">Verify & Reset Password</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- DAY TASKS MODAL (Calendar Day Click) -->
+    <div class="modal fade" id="modalDayTasks" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md);">
+                <div class="modal-header border-bottom py-3">
+                    <h6 class="modal-title fw-bold" id="modalDayTasksTitle"><i class="bi bi-calendar-event me-2 text-primary"></i> Tasks for Date</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-3" id="modalDayTasksBody">
+                    <!-- Dynamic tasks list populated by JS -->
+                </div>
+                <div class="modal-footer border-top py-2 d-flex justify-content-between">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="openCreateTaskModalForDate()"><i class="bi bi-plus-lg me-1"></i> Add Task for this Day</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CREATE WORKSPACE MODAL -->
+    <div class="modal fade" id="modalCreateWorkspace" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md);">
+                <div class="modal-header border-bottom py-3">
+                    <h6 class="modal-title fw-bold"><i class="bi bi-grid-plus me-2 text-primary"></i> Create New Workspace</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formCreateWorkspace" onsubmit="handleCreateWorkspace(event)">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Workspace Name</label>
+                            <input type="text" id="wsInputName" class="form-control" placeholder="e.g. Core Engineering Sprint, Personal Finance, etc." required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Description (Optional)</label>
+                            <textarea id="wsInputDesc" class="form-control" rows="2" placeholder="Workspace objectives, scope, or team purpose..."></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Mode Scope</label>
+                            <select id="wsInputMode" class="form-select">
+                                <option value="Personal">Personal Mode</option>
+                                <option value="Team" selected>Team Mode</option>
+                                <option value="Project">Project Mode</option>
+                                <option value="Business">Business Mode</option>
+                            </select>
+                            <div class="form-text small text-muted mt-1">
+                                <i class="bi bi-info-circle me-1"></i> You can create multiple workspaces under the same mode to organize separate teams, projects, or areas of focus.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top py-2">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm px-4">Create Workspace</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD WORKSPACE MEMBER MODAL -->
+    <div class="modal fade" id="modalAddWorkspaceMember" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md);">
+                <div class="modal-header border-bottom py-3">
+                    <h6 class="modal-title fw-bold"><i class="bi bi-person-plus me-2 text-primary"></i> Add Member to Workspace</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formAddWorkspaceMember" onsubmit="handleAddWorkspaceMember(event)">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Select User or Enter Email/Username</label>
+                            <select id="wsMemberSelectUser" class="form-select form-select-sm mb-2" onchange="if(this.value) document.getElementById('wsMemberUserInput').value = this.value">
+                                <option value="">-- Choose registered user (optional) --</option>
+                            </select>
+                            <input type="text" id="wsMemberUserInput" class="form-control" placeholder="e.g. alice or alice.johnson@taskflow.com" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Role</label>
+                            <select id="wsMemberRoleInput" class="form-select form-select-sm">
+                                <option value="Admin">Admin</option>
+                                <option value="Manager">Manager</option>
+                                <option value="Editor" selected>Editor</option>
+                                <option value="Member">Member</option>
+                                <option value="Viewer">Viewer</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Assign to Project <span class="text-danger">*</span></label>
+                            <select id="wsMemberProjectInput" class="form-select form-select-sm" required>
+                                <option value="">-- Choose Project to Assign (Mandatory) --</option>
+                            </select>
+                            <div class="form-text small text-muted" style="font-size: 0.72rem;">Assigning the team member to an active project is mandatory.</div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top py-2">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm px-4">Add to Workspace</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- CREATE MILESTONE MODAL -->
+    <div class="modal fade" id="modalCreateMilestone" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md);">
+                <div class="modal-header border-bottom py-3">
+                    <h6 class="modal-title fw-bold"><i class="bi bi-flag me-2 text-success"></i> Add Project Milestone</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formCreateMilestone" onsubmit="handleCreateMilestone(event)">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Target Project</label>
+                            <select id="milestoneInputProject" class="form-select form-select-sm" required></select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Milestone Title</label>
+                            <input type="text" id="milestoneInputTitle" class="form-control" placeholder="e.g. M1: Core Architecture Complete" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Target Due Date</label>
+                            <input type="date" id="milestoneInputDueDate" class="form-control form-control-sm">
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top py-2">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-success btn-sm px-4">Save Milestone</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADD ORG MEMBER / EMPLOYEE MODAL -->
+    <div class="modal fade" id="modalAddOrgMember" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md);">
+                <div class="modal-header border-bottom py-3">
+                    <h6 class="modal-title fw-bold"><i class="bi bi-person-plus me-2 text-info"></i> Add Employee to Organization</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formAddOrgMember" onsubmit="handleAddOrgMember(event)">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Select User or Enter Email/Username</label>
+                            <select id="orgMemberSelectUser" class="form-select form-select-sm mb-2" onchange="if(this.value) document.getElementById('orgMemberUserInput').value = this.value">
+                                <option value="">-- Choose registered user (optional) --</option>
+                            </select>
+                            <input type="text" id="orgMemberUserInput" class="form-control" placeholder="e.g. charlie or charlie.davis@taskflow.com" required>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Role</label>
+                                <select id="orgMemberRoleInput" class="form-select form-select-sm">
+                                    <option value="OrgAdmin">Organization Admin</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="Employee" selected>Employee</option>
+                                    <option value="Member">Member</option>
+                                    <option value="Guest">Guest</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Department</label>
+                                <select id="orgMemberDeptInput" class="form-select form-select-sm">
+                                    <option value="Engineering">Engineering</option>
+                                    <option value="Product">Product</option>
+                                    <option value="Marketing">Marketing</option>
+                                    <option value="Sales">Sales</option>
+                                    <option value="Operations">Operations</option>
+                                    <option value="HR">HR</option>
+                                    <option value="General">General</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top py-2">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-info text-white btn-sm px-4">Add Employee</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- EDIT ORG MEMBER / EMPLOYEE MODAL -->
+    <div class="modal fade" id="modalEditOrgMember" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-md);">
+                <div class="modal-header border-bottom py-3">
+                    <h6 class="modal-title fw-bold"><i class="bi bi-pencil-square me-2 text-primary"></i> Edit Employee Details</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <form id="formEditOrgMember" onsubmit="handleUpdateOrgMember(event)">
+                    <input type="hidden" id="editOrgMemberId">
+                    <div class="modal-body p-4">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Employee Name</label>
+                            <input type="text" id="editOrgMemberName" class="form-control form-control-sm" readonly disabled>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Organization Role</label>
+                                <select id="editOrgMemberRole" class="form-select form-select-sm" required>
+                                    <option value="OrgAdmin">Organization Admin</option>
+                                    <option value="Manager">Manager</option>
+                                    <option value="Employee">Employee</option>
+                                    <option value="Member">Member</option>
+                                </select>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label small fw-semibold">Department</label>
+                                <select id="editOrgMemberDept" class="form-select form-select-sm">
+                                    <option value="Engineering">Engineering</option>
+                                    <option value="Product">Product</option>
+                                    <option value="Marketing">Marketing</option>
+                                    <option value="Sales">Sales</option>
+                                    <option value="Operations">Operations</option>
+                                    <option value="HR">HR</option>
+                                    <option value="Executive">Executive</option>
+                                    <option value="General">General</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Member Status</label>
+                            <select id="editOrgMemberStatus" class="form-select form-select-sm">
+                                <option value="Active">Active</option>
+                                <option value="Inactive">Inactive</option>
+                                <option value="Pending">Pending</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="modal-footer border-top py-2">
+                        <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary btn-sm px-4"><i class="bi bi-check-lg me-1"></i> Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- =============================================================================
+         ACCESS & GOVERNANCE REQUESTS DRAWER (Left Side Panel)
+         ============================================================================= -->
+    <div class="offcanvas offcanvas-start shadow-lg" tabindex="-1" id="offcanvasRequestsPanel" style="width: 440px; max-width: 90vw; border-right: 1px solid var(--border-color); background: var(--bg-card);">
+        <div class="offcanvas-header border-bottom py-3">
+            <div class="d-flex align-items-center gap-2">
+                <div class="p-2 rounded-circle bg-primary bg-opacity-10 text-primary">
+                    <i class="bi bi-shield-check fs-5"></i>
+                </div>
+                <div>
+                    <h6 class="offcanvas-title fw-bold mb-0">Governance & Access Requests</h6>
+                    <span class="text-muted" style="font-size: 0.75rem;">Role approvals & collaborative permissions</span>
+                </div>
+            </div>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body p-3">
+            <!-- Navigation Tabs: 2 on top, 2 below -->
+            <div id="requestsNavTabs" class="mb-3">
+                <div class="row g-2 mb-2">
+                    <div class="col-6" id="tabIncomingCol">
+                        <button class="btn btn-sm w-100 request-tab-btn active fw-semibold d-flex align-items-center justify-content-center gap-1 py-2" id="tabIncomingBtn" onclick="switchRequestTab('incoming')">
+                            <i class="bi bi-inbox-fill"></i> Incoming <span id="incomingBadgeCount" class="badge bg-danger rounded-pill ms-1 d-none">0</span>
+                        </button>
+                    </div>
+                    <div class="col-6" id="tabApprovedCol">
+                        <button class="btn btn-sm w-100 request-tab-btn fw-semibold d-flex align-items-center justify-content-center gap-1 py-2" id="tabApprovedBtn" onclick="switchRequestTab('approved')">
+                            <i class="bi bi-check2-circle"></i> Approved
+                        </button>
+                    </div>
+                </div>
+                <div class="row g-2">
+                    <div class="col-6" id="tabMyRequestsCol">
+                        <button class="btn btn-sm w-100 request-tab-btn fw-semibold d-flex align-items-center justify-content-center gap-1 py-2" id="tabMyRequestsBtn" onclick="switchRequestTab('my')">
+                            <i class="bi bi-send-fill"></i> My Requests
+                        </button>
+                    </div>
+                    <div class="col-6" id="tabNewRequestCol">
+                        <button class="btn btn-sm w-100 request-tab-btn fw-semibold d-flex align-items-center justify-content-center gap-1 py-2" id="tabNewRequestBtn" onclick="switchRequestTab('new')">
+                            <i class="bi bi-plus-circle-fill"></i> Request Role
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- TAB 1: INCOMING REQUESTS -->
+            <div id="panelIncomingRequests">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.72rem;">Pending Decisions For You</span>
+                    <button class="btn btn-link btn-sm text-decoration-none p-0" onclick="loadIncomingRequests()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                </div>
+                <div id="incomingRequestsList">
+                    <div class="text-center text-muted small py-4">Loading incoming requests...</div>
+                </div>
+            </div>
+
+            <!-- TAB 2: APPROVED REQUESTS -->
+            <div id="panelApprovedRequests" class="d-none">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.72rem;">Approved Role History</span>
+                    <button class="btn btn-link btn-sm text-decoration-none p-0" onclick="loadApprovedRequests()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                </div>
+                <div id="approvedRequestsList">
+                    <div class="text-center text-muted small py-4">Loading approved requests...</div>
+                </div>
+            </div>
+
+            <!-- TAB 3: MY REQUESTS -->
+            <div id="panelMyRequests" class="d-none">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-muted small fw-semibold text-uppercase" style="font-size: 0.72rem;">My Submitted Requests</span>
+                    <button class="btn btn-link btn-sm text-decoration-none p-0" onclick="loadMyRequests()"><i class="bi bi-arrow-clockwise"></i> Refresh</button>
+                </div>
+                <div id="myRequestsList">
+                    <div class="text-center text-muted small py-4">Loading your requests...</div>
+                </div>
+            </div>
+
+            <!-- TAB 4: NEW ROLE REQUEST FORM -->
+            <div id="panelNewRequest" class="d-none">
+                <div class="card border-0 shadow-sm p-3 mb-3" style="border-radius: var(--radius-md); background: var(--bg-surface);">
+                    <h6 class="fw-bold small mb-2"><i class="bi bi-send-plus text-primary me-1"></i> Request Elevated Role / Access</h6>
+                    <p class="text-muted small mb-3">Request role promotion to participate in organization workflows, manage projects, or join collaborative teams.</p>
+                    <form id="formSubmitAccessRequest" onsubmit="handleSubmitAccessRequest(event)">
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Select Requested Role</label>
+                            <select id="reqRoleInput" class="form-select form-select-sm" onchange="handleInAppRoleChange()" required>
+                                <option value="OrgAdmin">Organization Admin</option>
+                                <option value="Manager" selected>Manager (Workspace & Project Manager)</option>
+                                <option value="Employee">Employee (Team Member / Contributor)</option>
+                            </select>
+                        </div>
+                        <div id="inAppOrgLockedContainer" class="mb-3 d-none">
+                            <label class="form-label small fw-semibold">Registered Organization</label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-light text-muted"><i class="bi bi-building-lock"></i></span>
+                                <input type="text" id="reqOrgLockedInput" class="form-control" readonly disabled>
+                            </div>
+                            <div class="form-text small text-muted" style="font-size: 0.72rem;">You are enrolled under this organization. Role requests apply within your registered organization.</div>
+                        </div>
+                        <div id="inAppOrgContainer" class="mb-3">
+                            <label class="form-label small fw-semibold">Target Organization</label>
+                            <select id="reqOrgInput" class="form-select form-select-sm" onchange="handleInAppOrgChange()">
+                                <option value="">-- Choose Organization --</option>
+                            </select>
+                        </div>
+                        <div id="inAppManagerContainer" class="mb-3 d-none">
+                            <label class="form-label small fw-semibold">Target Manager</label>
+                            <select id="reqManagerInput" class="form-select form-select-sm">
+                                <option value="">-- Choose Manager --</option>
+                            </select>
+                        </div>
+                        <div id="inAppRoleNotice" class="alert alert-light border py-2 px-3 small text-muted mb-3 d-none"></div>
+                        <div class="mb-3">
+                            <label class="form-label small fw-semibold">Reason / Department Objectives (Optional)</label>
+                            <textarea id="reqCommentsInput" class="form-control form-control-sm" rows="3" placeholder="State your purpose or requested permissions..."></textarea>
+                        </div>
+                        <button type="submit" id="btnSubmitRoleRequest" class="btn btn-primary btn-sm w-100 py-2 fw-semibold">
+                            <i class="bi bi-paper-plane me-1"></i> Submit Access Request
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- ACCESS RESTRICTED MODAL -->
+    <div class="modal fade" id="modalAccessRestricted" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg text-center p-4" style="border-radius: var(--radius-lg);">
+                <div class="d-inline-flex align-items-center justify-content-center p-3 rounded-circle bg-warning bg-opacity-10 text-warning mx-auto mb-3" style="width: 64px; height: 64px;">
+                    <i class="bi bi-shield-lock-fill fs-2"></i>
+                </div>
+                <h5 class="fw-bold mb-2">Access Restricted</h5>
+                <p class="text-muted small mb-4" id="modalAccessRestrictedMessage">
+                    You do not have access to this collaborative mode. To participate in Team, Project, and Business modes, you must be enrolled as an Employee under a Manager or have Manager/OrgAdmin privileges.
+                </p>
+                <div class="d-flex justify-content-center gap-2">
+                    <button type="button" class="btn btn-outline-secondary btn-sm px-3" data-bs-dismiss="modal">Stay in Personal Mode</button>
+                    <button type="button" class="btn btn-primary btn-sm px-3" onclick="closeAccessRestrictedModalAndOpenRequests()">
+                        <i class="bi bi-send-plus me-1"></i> Request Access
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FORGOT PASSWORD / OTP RECOVERY MODAL -->
+    <div class="modal fade" id="modalForgotPassword" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 shadow-lg" style="border-radius: var(--radius-lg); background: var(--bg-card); color: var(--text-main);">
+                <div class="modal-header border-0 pb-0 pt-4 px-4">
+                    <div>
+                        <h5 class="fw-bold mb-1"><i class="bi bi-shield-lock-fill text-primary me-2"></i> Password Recovery</h5>
+                        <p class="text-muted small mb-0">Reset your password securely with a 6-digit verification code.</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-4">
+                    <!-- STEP 1: Enter Username or Email -->
+                    <div id="otpStep1">
+                        <form id="formForgotStep1" onsubmit="handleSendOtp(event)">
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">Registered Username or Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                    <input type="text" id="otpInputUserOrEmail" class="form-control" placeholder="Enter your username or email" required autocomplete="username">
+                                </div>
+                                <div class="form-text small" style="font-size: 0.72rem;">We will send a 6-digit verification code to your registered email address.</div>
+                            </div>
+                            <button type="submit" id="btnSendOtpSubmit" class="btn btn-primary w-100 py-2 fw-semibold">
+                                <i class="bi bi-send me-1"></i> Send 6-Digit OTP
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- STEP 2: Enter OTP Code & New Password -->
+                    <div id="otpStep2" class="d-none">
+                        <form id="formForgotStep2" onsubmit="handleVerifyOtpAndReset(event)">
+                            <!-- Target Account Badge with Edit Button -->
+                            <div class="d-flex align-items-center justify-content-between p-3 mb-3 rounded-3 border bg-body-tertiary">
+                                <div class="d-flex align-items-center gap-2 text-truncate me-2">
+                                    <div class="p-2 rounded-circle bg-primary bg-opacity-10 text-primary d-flex align-items-center justify-content-center" style="width: 36px; height: 36px; flex-shrink: 0;">
+                                        <i class="bi bi-envelope-check fs-5"></i>
+                                    </div>
+                                    <div class="text-truncate">
+                                        <div class="text-muted" style="font-size: 0.7rem; text-transform: uppercase; font-weight: 600;">Account</div>
+                                        <div class="fw-bold text-truncate text-primary" id="otpDisplayTarget" style="font-size: 0.9rem;">name@company.com</div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-outline-secondary btn-sm px-2 py-1 flex-shrink-0" onclick="handleBackToForgotStep1()" title="Change Username or Email">
+                                    <i class="bi bi-pencil-square me-1"></i> Change
+                                </button>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold text-center d-block">6-Digit Verification Code</label>
+                                <input type="text" id="otpInputCode" class="form-control form-control-lg fw-bold text-center" placeholder="••••••" maxlength="6" style="letter-spacing: 6px; font-size: 1.4rem;" required autocomplete="one-time-code">
+                                <div class="d-flex justify-content-between align-items-center mt-2 px-1">
+                                    <span class="text-muted small" style="font-size: 0.75rem;">Valid for 10 minutes</span>
+                                    <button type="button" class="btn btn-link btn-sm p-0 text-decoration-none fw-semibold" onclick="handleResendForgotOtp()" id="btnResendForgotOtp" style="font-size: 0.78rem;">
+                                        Resend Code
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label class="form-label small fw-semibold">New Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                    <input type="password" id="otpInputNewPass" class="form-control" placeholder="Minimum 6 characters" minlength="6" required autocomplete="new-password">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('otpInputNewPass', this)" title="Show / Hide Password">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label small fw-semibold">Confirm New Password</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                    <input type="password" id="otpInputConfirmNewPass" class="form-control" placeholder="Re-enter new password" minlength="6" required autocomplete="new-password">
+                                    <button class="btn btn-outline-secondary" type="button" onclick="togglePasswordVisibility('otpInputConfirmNewPass', this)" title="Show / Hide Password">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <button type="submit" id="btnVerifyOtpSubmit" class="btn btn-success w-100 py-2 fw-semibold">
+                                <i class="bi bi-check2-shield me-1"></i> Verify & Reset Password
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS CONTAINER -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Bootstrap 5.3 JS Bundle -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Application Configuration & CORS Setup -->
+    <script src="js/config.js"></script>
+    <!-- Core Utilities & State -->
+    <script src="js/utils/ui.js"></script>
+    <script src="js/core/state.js"></script>
+    <script src="js/core/api.js"></script>
+    <script src="js/core/router.js"></script>
+    <!-- Feature Components -->
+    <script src="js/components/auth.component.js"></script>
+    <script src="js/components/workspace.component.js"></script>
+    <script src="js/components/task.component.js"></script>
+    <script src="js/components/project.component.js"></script>
+    <script src="js/components/team.component.js"></script>
+    <script src="js/components/organization.component.js"></script>
+    <script src="js/components/workflow.component.js"></script>
+    <script src="js/components/analytics.component.js"></script>
+    <script src="js/components/admin.component.js"></script>
+    <!-- Application Bootstrapper -->
+    <script src="js/app.js?v=8.0"></script>
+</body>
+</html>

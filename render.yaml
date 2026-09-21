@@ -1,0 +1,34 @@
+﻿services:
+  - type: web
+    name: taskflow-enterprise
+    env: docker
+    plan: free
+    region: oregon
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /
+    autoDeploy: true
+    envVars:
+      - key: ASPNETCORE_ENVIRONMENT
+        value: Production
+      - key: DATABASE_URL
+        sync: false # Set from Neon Cloud Dashboard
+      - key: Jwt__Secret
+        generateValue: true
+      - key: Jwt__Issuer
+        value: TaskFlowEnterprise
+      - key: Jwt__Audience
+        value: TaskFlowUsers
+      - key: Smtp__Host
+        value: smtp.gmail.com
+      - key: Smtp__Port
+        value: 587
+      - key: Smtp__EnableSsl
+        value: "true"
+      - key: Smtp__User
+        sync: false
+      - key: Smtp__Password
+        sync: false
+      - key: Smtp__SenderEmail
+        sync: false
+      - key: Smtp__SenderName
+        value: TaskFlow Admin
