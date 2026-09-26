@@ -21,11 +21,11 @@ public static class DatabaseSeeder
 
             string adminEmail = Environment.GetEnvironmentVariable("ADMIN_SEED_EMAIL") 
                 ?? config?["AdminSeed:Email"] 
-                ?? "sutiksn2424@gmail.com";
+                ?? "**********@gmail.com";
 
             string adminPassword = Environment.GetEnvironmentVariable("ADMIN_SEED_PASSWORD") 
                 ?? config?["AdminSeed:Password"] 
-                ?? "124984";
+                ?? "******";
 
             CreatePasswordHash(adminPassword, out string adminHash, out string adminSalt);
 
